@@ -10,14 +10,14 @@ if [[ -z "${EDGEVPNTOKEN}" ]]; then
   exit 1
 fi
 
-if [[ -z "${SSH_USERS}" ]]; then
-  echo "SSH_USERS should be set to a comma separated list of github users"
+if [[ -z "${GITHUB_USERS}" ]]; then
+  echo "GITHUB_USERS should be set to a comma separated list of github users"
   exit 1
 fi
 
 mkdir ~/.ssh
 export IFS=','
-for u in `echo "${SSH_USERS}"`; do
+for u in `echo "${GITHUB_USERS}"`; do
   curl https://github.com/${u}.keys >> ~/.ssh/authorized_keys
 done
 chmod 600 ~/.ssh/authorized_keys

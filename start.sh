@@ -6,4 +6,9 @@ if [[ -z "${EDGEVPNTOKEN}" ]]; then
   exit 1
 fi
 
-docker run -it -e EDGEVPNTOKEN=${EDGEVPNTOKEN} pairing-station /bin/bash
+if [[ -z "${GITHUB_USERS}" ]]; then
+  echo "GITHUB_USERS should be set to a comma separated list of github users"
+  exit 1
+fi
+
+docker run -it -e GITHUB_USERS="${GITHUB_USERS}" -e EDGEVPNTOKEN=${EDGEVPNTOKEN} pairing-station /bin/bash
