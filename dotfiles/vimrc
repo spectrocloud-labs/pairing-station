@@ -1,0 +1,353 @@
+"source ~/.vim/vimrc
+
+" VUNDLE CONFIG START
+set nocompatible              " be iMproved, required
+filetype off                  " required
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'preservim/nerdtree'
+Plugin 'flazz/vim-colorschemes'
+
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'fatih/vim-go'
+Plugin 'slim-template/vim-slim.git'
+"Plugin 'godlygeek/csapprox'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'neoclide/coc.nvim', {'branch':'release' }
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'mhinz/vim-grepper'
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Awesome fuzzy finder
+Plugin 'junegunn/fzf.vim'
+Plugin 'tpope/vim-commentary'                                       " Comment stuff out
+
+Plugin 'trayo/vim-ginkgo-snippets'                                  " Add snippets for Ginkgo BDD testing library for go
+Plugin 'trayo/vim-gomega-snippets'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+
+" Earthly syntax highlighting
+" https://github.com/earthly/earthly.vim
+Plugin 'earthly/earthly.vim', { 'branch': 'main' }
+
+Plugin 'mads-hartmann/bash-language-server'
+
+Plugin 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" Git plugin not hosted on GitHub
+" Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Avoid a name conflict with L9
+" Plugin 'user/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+" VUNDLE CONFIG END
+
+
+" Open nerdtree automatically if no file was specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" Nerdtree shortcut
+function! NERDTreeToggleAndFind()
+  if (exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1)
+    execute ':NERDTreeClose'
+  else
+    if (expand("%:t") != '')
+        execute ':NERDTreeFind'
+    else
+        execute ':NERDTreeToggle'
+    endif
+  endif
+endfunction
+nnoremap <silent> <C-n> :call NERDTreeToggleAndFind()<CR>
+
+" Close vim is Nerdtree is the only window left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+
+" ctrip
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+
+" Open buffer in existing window
+set switchbuf=useopen
+
+set backupdir=/home/dev/.vim_tmp
+set directory=/home/dev/.vim_tmp
+set guifont=DejaVu\ Sans\ Mono\ 13
+set expandtab
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+set smartindent
+set scrolloff=10
+set shiftround
+set autoindent
+set t_Co=256
+syntax on
+set background=dark
+"let g:solarized_termcolors=256
+"colorscheme solarized
+
+" COC floating window background
+func! s:my_colors_setup() abort
+    " this is an example
+    hi Pmenu guibg=#888888 gui=NONE ctermbg=grey font=white
+    hi PmenuSel guibg=#888888 gui=NONE ctermbg=grey font=white
+    hi PmenuSbar guibg=#888888 ctermbg=000 ctermbg=grey font=white
+    hi PmenuThumb guibg=#888888 ctermbg=000 ctermbg=grey font=white
+    hi CocErrorFloat guibg=#888888 ctermbg=grey ctermfg=black guifg=black font=white
+    " hi CocFloating ctermbg=black font=white
+endfunc
+
+" augroup colorscheme_coc_setup | au!
+"     au ColorScheme * call s:my_colors_setup()
+" augroup END
+colorscheme desert
+
+set number
+set cc=80
+
+set clipboard=unnamedplus
+"set clipboard=unnamed
+
+" https://www.reddit.com/r/Fedora/comments/ax9p9t/vim_and_system_clipboard_under_wayland/
+xnoremap "+y y:call system("wl-copy", @")<cr>
+nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
+nnoremap "*p :let @"=substitute(system("wl-paste --no-newline --primary"), '<C-v><C-m>', '', 'g')<cr>p
+
+set guioptions-=m    "remove menu bar
+set guioptions-=T    "remove toolbar
+set guioptions-=l  "remove scrollbars
+set guioptions-=r  "remove scrollbars
+set guioptions-=b "remove scrollbars
+
+set guitablabel=\[%N\]\ %t\ %M 
+
+set foldmethod=indent
+set foldlevelstart=20
+
+"Spellchecking for md files
+autocmd BufRead,BufNewFile *.md setlocal spell
+set spelllang=en
+set spellfile=$HOME/.vim_tmp/en.utf-8.add
+set complete+=kspell
+"disable html rendering in vim
+let html_no_rendering=1
+
+autocmd CursorHold * call Timer()
+function! Timer()
+    call feedkeys("f\e")
+    checktime
+endfunction
+set updatetime=5000  " milliseconds
+
+"----------------------------"
+
+set mouse=a                 " Automatically enable mouse usage
+set history=1000                    " Store a ton of history (default is 20)
+set showmode                    " Display the current mode
+set incsearch                   " Find as you type search
+set listchars=tab:,.,trail:.,extends:#,nbsp:. " Highlight problematic whitespace
+
+if has('cmdline_info')
+    set ruler                   " Show the ruler
+    set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+    set showcmd                 " Show partial commands in status line and
+                                " Selected characters/lines in visual mode
+endif
+
+if has('statusline')
+    set laststatus=2
+
+    " Broken down into easily includeable segments
+    set statusline=%<%f\                     " Filename
+    set statusline+=%w%h%m%r                 " Options
+    "set statusline+=%{fugitive#statusline()} " Git Hotness
+    set statusline+=\ [%{&ff}/%Y]            " Filetype
+    set statusline+=\ [%{getcwd()}]          " Current dir
+    set statusline+=%=%-14.(%l,%c%V%)\ %p%%  " Right aligned file nav info
+endif
+
+au BufRead,BufNewFile *.pde set filetype=arduino
+au BufRead,BufNewFile *.ino set filetype=arduino
+
+
+" --------------------------------- FuzzyFind  -----------------------------
+let g:fzf_layout = { 'down': '~30%' }
+let g:fzf_buffers_jump = 1
+
+" Show preview when searching files
+command! -bang -nargs=? -complete=dir Files
+  \ call fzf#vim#files(<q-args>, fzf#vim#with_preview(), <bang>0)
+
+" Use Rg for searching for contents and show preview
+command! -bang -nargs=* Rg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case --no-ignore --hidden --follow --glob "!.git/*" --glob "!vendor/" '.shellescape(<q-args>), 1,
+  \    fzf#vim#with_preview({'down': '60%', 'options': '--bind alt-down:preview-down --bind alt-up:preview-up'},'right:50%', '?'),
+  \   <bang>0)
+
+" hide the statusline of the containing buffer
+augroup fzf
+  autocmd!
+  autocmd  FileType fzf set laststatus=0 noshowmode noruler
+    \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+augroup END
+
+" search mappings
+let mapleader=' '
+nnoremap <silent> <leader>ss :Grepper -tool rg<cr>
+nnoremap <leader>sr :Rg
+nnoremap <silent> <c-p> :Files<cr>
+nnoremap <silent> <leader>fo :Buffers<cr>
+nnoremap <silent> <leader>fm :History<cr>
+
+function! s:search_term_under_cursor()
+  execute "Rg " expand("<cword>")
+endfunction
+nnoremap <leader>st :call <SID>search_term_under_cursor()<CR>
+
+" --------------------------------- Coc  -------------------------------
+
+" add json-lsp
+let g:coc_global_extensions=['coc-json', 'coc-yaml']
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+let g:coc_status_warning_sign = '⚠ '
+let g:coc_status_error_sign = '❌ '
+
+" https://github.com/autozimu/LanguageClient-neovim/blob/next/INSTALL.md
+let g:LanguageClient_serverCommands = {
+    \ 'ruby': ['~/.rbenv/shims/solargraph', 'stdio'],
+    \ }
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+"nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+nmap <leader>rn  <Plug>(coc-rename)
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Confirm completion
+inoremap <silent><expr> <C-o> pumvisible() ? coc#_select_confirm() :
+                                           \"\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" --------------------------------------------------------------------------
+
+" ultisnips configuration. You need to change this to something other than <tab> if you use one of the following:
+" - https://github.com/Valloric/YouCompleteMe
+" - https://github.com/nvim-lua/completion-nvim
+let g:UltiSnipsExpandTrigger="<c-j>"
+let g:UltiSnipsJumpForwardTrigger='<c-f>'
+let g:UltiSnipsJumpBackwardTrigger='<c-b>'
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+let g:go_fmt_command = "goimports"
+
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
+" Get rid of deprecation warning
+" https://www.wiserfirst.com/blog/vim-tip-snipmate-legacy-parser-warning/
+let g:snipMate = { 'snippet_version' : 1 }
+
+" https://github.com/autozimu/LanguageClient-neovim/blob/next/INSTALL.md
+set runtimepath+=~/.vim/plugins/LanguageClient-neovim
