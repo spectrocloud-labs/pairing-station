@@ -10,16 +10,22 @@ if [[ -z "${EDGEVPNTOKEN}" ]]; then
   exit 1
 fi
 
-if [[ -n "${SSH_USERS}" ]]; then
-  export IFS=','
-  for u in "${SSH_USERS}"; do
-    curl https://github.com/${u}.keys >> ~/.ssh/authorized_keys
-  done
+if [[ -z "${SSH_USERS}" ]]; then
+  echo "SSH_USERS should be set to a comma separated list of github users"
+  exit 1
 fi
 
+mkdir ~/.ssh
+export IFS=','
+for u in `echo "${SSH_USERS}"`; do
+  curl https://github.com/${u}.keys >> ~/.ssh/authorized_keys
+done
+chmod 600 ~/.ssh/authorized_keys
+
 # Run ssh server in the background
-sudo /usr/sbin/sshd -D -p 2222 &
+sudo /usr/sbin/sshd -D -E /var/log/sshd.log -f /etc/ssh/sshd_config -p 2222 &
 
 # Start edgevpn service in the background
-edgevpn service-add "PairingSSH" "127.0.0.1:2222" &
+edgevpn service-add "PairingSSH" "127.0.0.1:2222" 2>&1 > /home/dev/edgevpn.log &
+
 tmux new -s pairing

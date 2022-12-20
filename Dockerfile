@@ -6,6 +6,11 @@ RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip opens
 
 # Setup ssh server
 RUN ssh-keygen -A
+RUN echo "AuthorizedKeysFile	.ssh/authorized_keys" >> /etc/ssh/sshd_config
+RUN echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
+RUN echo "UsePAM yes" >> /etc/ssh/sshd_config
+RUN echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
+RUN echo "AllowAgentForwarding yes" >> /etc/ssh/sshd_config
 
 # Setup tmux
 RUN mkdir /run/tmux
@@ -19,6 +24,9 @@ RUN rm edgevpn*.tar.gz
 
 # Setup user
 RUN useradd -ms /bin/bash dev
+COPY dotfiles/bashrc /home/dev/.bashrc
+# https://www.babushk.in/posts/renew-environment-tmux.html
+COPY dotfiles/tmux.conf /home/dev/.tmux.conf
 
 # Setup sudo
 RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/dev
@@ -47,5 +55,3 @@ COPY entrypoint.sh /entrypoint.sh
 RUN sudo chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-# TODO: Start tmux and automatically connect new users to that as soon as they ssh
