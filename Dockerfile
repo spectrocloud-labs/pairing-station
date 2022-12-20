@@ -24,9 +24,6 @@ RUN rm edgevpn*.tar.gz
 
 # Setup user
 RUN useradd -ms /bin/bash dev
-COPY dotfiles/bashrc /home/dev/.bashrc
-# https://www.babushk.in/posts/renew-environment-tmux.html
-COPY dotfiles/tmux.conf /home/dev/.tmux.conf
 
 # Setup sudo
 RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/dev
@@ -36,7 +33,11 @@ RUN usermod -aG wheel dev
 USER dev
 WORKDIR /home/dev
 
-COPY dotfiles/vimrc /home/dev/.vimrc
+COPY --chown=dev dotfiles/vimrc /home/dev/.vimrc
+COPY --chown=dev dotfiles/bashrc /home/dev/.bashrc
+RUN chmod 644 /home/dev/.bashrc
+# https://www.babushk.in/posts/renew-environment-tmux.html
+COPY --chown=dev dotfiles/tmux.conf /home/dev/.tmux.conf
 
 #### Setup vim
 
@@ -51,7 +52,7 @@ RUN vim +PluginInstall +GoInstallBinaries +qall
 # Finish coc installation:
 RUN cd /home/dev/.vim/bundle/coc.nvim && yarn install
 
-COPY entrypoint.sh /entrypoint.sh
+COPY --chown=dev entrypoint.sh /entrypoint.sh
 RUN sudo chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

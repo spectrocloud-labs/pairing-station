@@ -1,8 +1,10 @@
-if [ -n "$TMUX" ]; then                                                                               
-  function refresh {                                                                                
-    export $(tmux show-environment | grep "^SSH_AUTH_SOCK")                                       
-    export $(tmux show-environment | grep "^DISPLAY")                                             
-  }                                                                                                 
-else                                                                                                  
-  function refresh { }                                                                              
+if [ -n "$TMUX" ]; then
+  function refresh_tmux_env {
+    export $(tmux show-environment | grep "^SSH_AUTH_SOCK")
+    export $(tmux show-environment | grep "^DISPLAY")
+  }
+else
+  function refresh_tmux_env(){
+    :
+  }
 fi
