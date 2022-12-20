@@ -44,7 +44,7 @@ RUN vim +PluginInstall +GoInstallBinaries +qall
 RUN cd /home/dev/.vim/bundle/coc.nvim && yarn install
 
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN sudo chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
