@@ -11,4 +11,9 @@ if [[ -z "${GITHUB_USERS}" ]]; then
   exit 1
 fi
 
-docker run --name pairing-station --rm -d --user 1000:1001 -it -v workspace:/home/dev/workspace -e GITHUB_USERS="${GITHUB_USERS}" -e EDGEVPNTOKEN=${EDGEVPNTOKEN} pairing-station /bin/bash
+docker run --name pairing-station \
+  --rm -d --user 1000:1001 \
+  -it -v workspace:/home/dev/workspace \
+  -e GITHUB_USERS="${GITHUB_USERS}" \
+  -e EDGEVPNTOKEN=${EDGEVPNTOKEN} \
+  ghcr.io/spectrocloud-labs/pairing-station:main /bin/bash
