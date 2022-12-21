@@ -1,8 +1,9 @@
 FROM opensuse/tumbleweed
 
 # TODO: Uncomment this when done
-# RUN zypper ref 
-RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip openssh tmux libpython3_10-1_0
+RUN zypper ref
+# kcrypt-challenger deps: openssl-devel
+RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip openssh tmux libpython3_10-1_0 openssl-devel
 
 # Setup ssh server
 RUN ssh-keygen -A
@@ -42,6 +43,12 @@ RUN mkdir -p /home/dev/.vim
 COPY --chown=dev dotfiles/coc-settings.json /home/dev/.vim/coc-settings.json
 COPY --chown=dev dotfiles/gitconfig /home/dev/.gitconfig
 
+# Setup git-aware-prompt
+RUN mkdir /home/dev/.bash
+RUN cd /home/dev/.bash && git clone https://github.com/jimeh/git-aware-prompt.git
+RUN echo "export GITAWAREPROMPT=~/.bash/git-aware-prompt" >> /home/dev/.bashrc
+RUN echo "source \"${GITAWAREPROMPT}/main.sh\"" >> /home/dev/.bashrc
+
 #### Setup vim
 
 RUN mkdir /home/dev/.vim_tmp
@@ -51,6 +58,9 @@ RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/dev/.vim/bundle/
 
 # Install vim plugins 
 RUN vim +PluginInstall +GoInstallBinaries +qall
+
+# Install languageclient binary
+RUN cd /home/dev/.vim/bundle/LanguageClient-neovim && bash install.sh
 
 # Finish coc installation:
 RUN cd /home/dev/.vim/bundle/coc.nvim && yarn install
