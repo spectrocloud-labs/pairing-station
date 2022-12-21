@@ -46,8 +46,6 @@ COPY --chown=dev dotfiles/gitconfig /home/dev/.gitconfig
 # Setup git-aware-prompt
 RUN mkdir /home/dev/.bash
 RUN cd /home/dev/.bash && git clone https://github.com/jimeh/git-aware-prompt.git
-RUN echo "export GITAWAREPROMPT=~/.bash/git-aware-prompt" >> /home/dev/.bashrc
-RUN echo "source \"${GITAWAREPROMPT}/main.sh\"" >> /home/dev/.bashrc
 
 #### Setup vim
 

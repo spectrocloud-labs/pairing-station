@@ -3,6 +3,25 @@ export GOBIN=$GOPATH/bin # The go binaries
 export GOOS=linux
 export PATH=$PATH:$GOPATH/bin
 
+# git aware prompt
+export GITAWAREPROMPT=~/.bash/git-aware-prompt
+source "${GITAWAREPROMPT}/main.sh"
+export PS1="\w \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
+export SUDO_PS1="\[$bakred\]\u@\h\[$txtrst\] \w\$ "
+
+# Unlimited history
+HISTSIZE=-1 HISTFILESIZE=-1
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+export EDITOR=vim
+
+export GIT_DUET_ROTATE_AUTHOR=1
+
 if [ -n "$TMUX" ]; then
   function refresh_tmux_env {
     export $(tmux show-environment | grep "^SSH_AUTH_SOCK")
