@@ -7,7 +7,7 @@ This is not meant to be a permanent box so whatever changes you make, make sure 
 
 
 ```bash
-docker build -t pairint-station .
+docker build -t pairing-station .
 ```
 
 or pull the latest build from ghcr:
