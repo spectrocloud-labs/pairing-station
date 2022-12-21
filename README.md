@@ -10,6 +10,12 @@ This is not meant to be a permanent box so whatever changes you make, make sure 
 docker build -t pairint-station .
 ```
 
+or pull the latest build from ghcr:
+
+```
+docker pull ghcr.io/spectrocloud-labs/pairing-station:main
+```
+
 ## Start a container
 
 The pairing container can be started anywhere, on your workstation, the cloud,
