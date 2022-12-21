@@ -38,6 +38,9 @@ COPY --chown=dev dotfiles/bashrc /home/dev/.bashrc
 RUN chmod 644 /home/dev/.bashrc
 # https://www.babushk.in/posts/renew-environment-tmux.html
 COPY --chown=dev dotfiles/tmux.conf /home/dev/.tmux.conf
+RUN mkdir -p /home/dev/.vim
+COPY --chown=dev dotfiles/coc-settings.json /home/dev/.vim/coc-settings.json
+COPY --chown=dev dotfiles/gitconfig /home/dev/.gitconfig
 
 #### Setup vim
 

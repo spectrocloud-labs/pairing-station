@@ -1,0 +1,42 @@
+{
+  // "suggest.enablePreselect": true,
+  "suggest.noselect": true,
+  // "suggest.selection": "first",
+  "coc.preferences.hoverTarget": "float",
+  "coc.preferences.enableFloatHighlight": true,
+  "coc.preferences.useQuickfixForLocations": true,
+  "coc.preferences.formatOnSaveFiletypes": [
+    "dhall",
+    "go",
+    "json",
+    "markdown",
+    "sh",
+    "yaml"
+  ],
+  "languageserver": {
+    "go": {
+      "command": "gopls",
+      "rootPatterns": ["go.mod"],
+      "trace.server": "verbose",
+      "filetypes": ["go"],
+      "initializationOptions": {
+        "completeUnimported": true,
+        "usePlaceholders": true,
+        "staticcheck": true
+      }
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": [
+        "start"
+      ],
+      "filetypes": [
+        "sh"
+      ],
+      "ignoredRootPaths": [
+        "~"
+      ]
+    }
+  }
+}
+

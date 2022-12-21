@@ -1,0 +1,30 @@
+[alias]
+        st = status
+        ci = commit -s
+        co = checkout
+        di = diff
+        br = branch
+        mod = ls-files -m
+        tip = log -1
+        ds = diff --cached
+        sm = submodule
+        line = log --oneline
+        hard = reset --hard
+        ls = ls-files
+        pop = stash pop
+        lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+        remote-list = for-each-ref  --sort=committer --format='%(align:width=70) %(refname) %(end) %(authorname)' refs/remotes/origin/**
+
+[grep]
+        extendRegexp = true
+
+[branch "main"]
+        remote = origin
+        merge = refs/heads/master
+[init]
+        defaultBranch = main
+[commit]
+        gpgsign = true
+[format]
+        signoff = true
+

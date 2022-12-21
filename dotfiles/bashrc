@@ -1,3 +1,8 @@
+export GOPATH=~/go # The go workspace
+export GOBIN=$GOPATH/bin # The go binaries
+export GOOS=linux
+export PATH=$PATH:$GOPATH/bin
+
 if [ -n "$TMUX" ]; then
   function refresh_tmux_env {
     export $(tmux show-environment | grep "^SSH_AUTH_SOCK")
