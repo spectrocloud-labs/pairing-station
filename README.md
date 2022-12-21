@@ -1,4 +1,4 @@
-# Treat your pairing station like cattle, not pets!
+# Treat your pairing station like cattle, not pet!
 
 This project is a way to create a pairing station to which developers can easily ssh.
 This is not meant to be a permanent box so whatever changes you make, make sure you make them in this repo.
