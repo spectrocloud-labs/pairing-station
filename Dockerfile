@@ -36,15 +36,13 @@ RUN mv kubectl /usr/bin/kubectl
 # Setup user
 RUN useradd -ms /bin/bash dev
 
+# Setup sudo
 # Setup docker (in case this container runs in privileged mode)
 # https://docs.docker.com/engine/install/linux-postinstall/
-RUN groupadd docker
-RUN usermod -aG docker dev
-
-# Setup sudo
 RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/dev
 RUN groupadd wheel
 RUN usermod -aG wheel dev
+RUN usermod -aG docker dev
 
 USER dev
 WORKDIR /home/dev
