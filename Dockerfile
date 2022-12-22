@@ -3,7 +3,7 @@ FROM opensuse/tumbleweed
 # TODO: Uncomment this when done
 RUN zypper ref
 # kcrypt-challenger deps: openssl-devel
-RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip openssh tmux libpython3_10-1_0 openssl-devel
+RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip openssh tmux libpython3_10-1_0 openssl-devel tig
 
 # Setup ssh server
 RUN ssh-keygen -A
