@@ -14,7 +14,7 @@ RUN echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
 RUN echo "AllowAgentForwarding yes" >> /etc/ssh/sshd_config
 
 # Setup tmux
-RUN mkdir /run/tmux
+RUN mkdir -p /run/tmux
 RUN chmod 777 /run/tmux
 
 #### Setup edgevpn
@@ -61,12 +61,12 @@ COPY --chown=dev dotfiles/gitconfig /home/dev/.gitconfig
 RUN earthly bootstrap --with-autocomplete
 
 # Setup git-aware-prompt
-RUN mkdir /home/dev/.bash
+RUN mkdir -p /home/dev/.bash
 RUN cd /home/dev/.bash && git clone https://github.com/jimeh/git-aware-prompt.git
 
 #### Setup vim
 
-RUN mkdir /home/dev/.vim_tmp
+RUN mkdir -p /home/dev/.vim_tmp
 
 # Install vundle
 RUN git clone https://github.com/VundleVim/Vundle.vim.git /home/dev/.vim/bundle/Vundle.vim
