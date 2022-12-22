@@ -11,7 +11,9 @@ if [[ -z "${GITHUB_USERS}" ]]; then
   exit 1
 fi
 
+# Run privileged if you want to be able to run docker inside (e.g. for Earthly)
 docker run --name pairing-station \
+  --privileged -v /var/run/docker.sock:/var/run/docker.sock \
   --rm -d --user 1000:1001 \
   -it -v workspace:/home/dev/workspace \
   -e GITHUB_USERS="${GITHUB_USERS}" \

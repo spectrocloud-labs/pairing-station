@@ -3,7 +3,7 @@ FROM opensuse/tumbleweed
 # TODO: Uncomment this when done
 RUN zypper ref
 # kcrypt-challenger deps: openssl-devel
-RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip openssh tmux libpython3_10-1_0 openssl-devel tig fzf ripgrep
+RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip openssh tmux libpython3_10-1_0 openssl-devel tig fzf ripgrep docker
 
 # Setup ssh server
 RUN ssh-keygen -A
@@ -35,6 +35,11 @@ RUN mv kubectl /usr/bin/kubectl
 
 # Setup user
 RUN useradd -ms /bin/bash dev
+
+# Setup docker (in case this container runs in privileged mode)
+# https://docs.docker.com/engine/install/linux-postinstall/
+RUN groupadd docker
+RUN usermod -aG docker dev
 
 # Setup sudo
 RUN echo "%wheel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/dev
