@@ -8,7 +8,7 @@ RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip opens
 # Make docker work without sudo (because the groups don't work as expected for some reason)
 RUN mv /usr/bin/docker /usr/bin/docker-original
 RUN echo '#!/bin/bash' >> /usr/bin/docker
-RUN echo 'sudo /usr/bin/docker-original' >> /usr/bin/docker
+RUN echo 'sudo /usr/bin/docker-original $@' >> /usr/bin/docker
 RUN chmod +x /usr/bin/docker
 
 # Setup ssh server
