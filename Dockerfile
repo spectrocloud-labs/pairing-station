@@ -5,6 +5,12 @@ RUN zypper ref
 # kcrypt-challenger deps: openssl-devel
 RUN zypper in -y gvim go1.18 nodejs yarn npm shadow git wget sudo tar gzip openssh tmux libpython3_10-1_0 openssl-devel tig fzf ripgrep docker
 
+# Make docker work without sudo (because the groups don't work as expected for some reason)
+RUN mv /usr/bin/docker /usr/bin/docker-original
+RUN echo '#!/bin/bash' >> /usr/bin/docker
+RUN echo 'sudo /usr/bin/docker-original' >> /usr/bin/docker
+RUN chmod +x /usr/bin/docker
+
 # Setup ssh server
 RUN ssh-keygen -A
 RUN echo "AuthorizedKeysFile	.ssh/authorized_keys" >> /etc/ssh/sshd_config
