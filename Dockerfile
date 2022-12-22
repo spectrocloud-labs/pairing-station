@@ -23,6 +23,11 @@ RUN tar -xvf edgevpn*.tar.gz edgevpn
 RUN mv edgevpn /usr/bin/edgevpn
 RUN rm edgevpn*.tar.gz
 
+### Setup earthly
+RUN wget https://github.com/earthly/earthly/releases/latest/download/earthly-linux-amd64
+RUN chmod +x earthly-linux-amd64
+RUN mv earthly-linux-amd64 /usr/bin/earthly
+
 ### Setup kubectl
 RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 RUN chmod +x kubectl
@@ -47,6 +52,8 @@ COPY --chown=dev dotfiles/tmux.conf /home/dev/.tmux.conf
 RUN mkdir -p /home/dev/.vim
 COPY --chown=dev dotfiles/coc-settings.json /home/dev/.vim/coc-settings.json
 COPY --chown=dev dotfiles/gitconfig /home/dev/.gitconfig
+
+RUN earthly bootstrap --with-autocomplete
 
 # Setup git-aware-prompt
 RUN mkdir /home/dev/.bash
