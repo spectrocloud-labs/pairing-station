@@ -23,6 +23,11 @@ RUN tar -xvf edgevpn*.tar.gz edgevpn
 RUN mv edgevpn /usr/bin/edgevpn
 RUN rm edgevpn*.tar.gz
 
+### Setup kubectl
+RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+RUN chmod +x kubectl
+RUN mv kubectl /usr/bin/kubectl
+
 # Setup user
 RUN useradd -ms /bin/bash dev
 
