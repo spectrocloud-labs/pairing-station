@@ -1,5 +1,39 @@
 #!/bin/bash
 
+cleanup() {
+  # Stop service-connect
+  PS_ID=$(ps aux | grep "edgevpn service-connect PairingSSH" | grep -v grep | awk '{print $2}')
+  if [ -n "${PS_ID}" ]; then
+    kill $(ps aux | grep "edgevpn service-connect PairingSSH" | grep -v grep | awk '{print $2}')
+  fi
+
+  command="docker stop pairing-station"
+  if [[ -z "${VM_CONNECT}" ]]; then
+    eval "${command}"
+  else
+    ssh -t "${VM_CONNECT}" "${command}" || true
+  fi
+}
+
+start() {
+  cleanup
+
+  command="docker run -d --name pairing-station \
+  --privileged \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --rm --user 1000:1001 \
+  -it -v "${PWD}":/home/dev/workspace \
+  -e GITHUB_USERS="${GITHUB_USERS}" \
+  -e EDGEVPNTOKEN=${EDGEVPNTOKEN} \
+  ghcr.io/spectrocloud-labs/pairing-station:main /bin/bash"
+
+  if [[ -z "${VM_CONNECT}" ]]; then
+    eval "${command}"
+  else
+    ssh -t "${VM_CONNECT}" "${command}"
+  fi
+}
+
 export TOKEN_FILE=$(mktemp)
 
 if [[ -z "${EDGEVPNTOKEN}" ]]; then
@@ -17,15 +51,7 @@ if [[ -z "${GITHUB_USERS}" ]]; then
   exit 1
 fi
 
-# Run privileged if you want to be able to run docker inside (e.g. for Earthly)
-docker run -d --name pairing-station \
-  --privileged \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  --rm --user 1000:1001 \
-  -it -v "${PWD}":/home/dev/workspace \
-  -e GITHUB_USERS="${GITHUB_USERS}" \
-  -e EDGEVPNTOKEN=${EDGEVPNTOKEN} \
-  ghcr.io/spectrocloud-labs/pairing-station:main /bin/bash
+start
 
 echo "Done!"
 echo "Connect with these commands:"
